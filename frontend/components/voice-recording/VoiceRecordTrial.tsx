@@ -11,8 +11,6 @@ export default function VoiceRecordTrial() {
         setAudioUrl(url);
     };
 
-    console.log(audioUrl);
-
     return (
         <div className="flex gap-4">
             <AudioRecorder
@@ -21,12 +19,6 @@ export default function VoiceRecordTrial() {
                 audioTrackConstraints={{
                     noiseSuppression: true,
                     echoCancellation: true,
-                    // autoGainControl,
-                    // channelCount,
-                    // deviceId,
-                    // groupId,
-                    // sampleRate,
-                    // sampleSize,
                 }}
                 onNotAllowedOrFound={(err: any) => console.table(err)}
                 downloadOnSavePress={true}
