@@ -9,7 +9,7 @@ variable "vpc_info" {
 variable "vpc_subnet_info" {
   type = map(list(string))
   default = {
-    "azs"                   = ["us-east-1a", "us-east-2"]
+    "azs"                   = ["us-east-1a", "us-east-1b"]
     "private_subnet_blocks" = ["10.0.128.0/18", "10.0.192.0/18"]
     "public_subnet_blocks"  = ["10.0.0.0/18", "10.0.64.0/18"]
   }
