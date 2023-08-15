@@ -15,7 +15,17 @@ module "vpc" {
 
   map_public_ip_on_launch = true
   enable_nat_gateway      = true
-  create_igw              = true
+  nat_eip_tags = {
+    "Name" = "nat-EIP"
+  }
+  nat_gateway_tags = {
+    "Name" = "natgw"
+  }
+
+  create_igw = true
+  igw_tags = {
+    "Name" = "igw-main"
+  }
 }
 
 resource "aws_security_group" "allow_web_sg" {
