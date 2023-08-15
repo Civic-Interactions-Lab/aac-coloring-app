@@ -30,15 +30,15 @@ resource "aws_security_group" "allow_web_sg" {
 
 }
 
-resource "aws_instance" "aws_ins_web" {
+# resource "aws_instance" "aws_ins_web" {
 
-  ami                         = "ami-080a2d17e153ef91f"
-  instance_type               = "t2.xlarge"
-  vpc_security_group_ids      = [aws_security_group.allow_web_sg.id]
-  associate_public_ip_address = true
+#   ami                         = "ami-080a2d17e153ef91f"
+#   instance_type               = "t2.micro"
+#   vpc_security_group_ids      = [aws_security_group.allow_web_sg.id]
+#   associate_public_ip_address = true
 
-}
+# }
 
-output "instance_ip" {
-  value = aws_instance.aws_ins_web.public_ip
-}
+# output "instance_ip" {
+#   value = aws_instance.aws_ins_web.public_ip
+# }
