@@ -6,15 +6,15 @@ terraform {
     }
   }
 
-  # backend "remote" {
-  #   organization = "AAC-Coloring"
+  backend "remote" {
+    organization = "AAC-Coloring"
 
-  #   workspaces {
-  #     name = "aac-coloring-infra"
-  #   }
-  # }
-
-  backend "local" {
-
+    workspaces {
+      name = "aac-coloring-infra"
+    }
   }
+
+  # backend "local" {
+
+  # }
 }

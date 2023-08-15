@@ -31,7 +31,7 @@ module "vpc" {
 }
 
 resource "aws_security_group" "allow_web_sg" {
-  name   = "security group from terraform"
+  name   = "Allow SSH from internal and HTTP"
   vpc_id = module.vpc.vpc_id
 
   ingress {
@@ -39,7 +39,7 @@ resource "aws_security_group" "allow_web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_info.vpc_cidr]
   }
 
   ingress {
@@ -111,7 +111,8 @@ resource "aws_lb_listener" "alb_listener" {
 
 # ASG
 
-resource "aws_autoscaling_group" "auto_scaling_group" {
+resource "aws_autoscaling_group" "backend_asg" {
+  name                = "backend-ASG"
   desired_capacity    = var.asg_info.desired_capacity
   max_size            = var.asg_info.max_size
   min_size            = var.asg_info.min_size
@@ -124,7 +125,30 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   }
 }
 
-output "alb_public_url" {
-  description = "Public URL"
-  value       = aws_lb.alb.dns_name
+# ASG Policy
+resource "aws_cloudwatch_metric_alarm" "cpu_alarm" {
+  alarm_name          = "backend-cpu-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2" # Number of consecutive periods the metric must be above the threshold
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "70" # CPU utilization threshold for scaling
+  alarm_description   = "Scale up when CPU utilization is above 70%"
+  alarm_actions       = [aws_autoscaling_policy.scale_up_policy.arn]
+
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.backend_asg.name
+  }
 }
+
+resource "aws_autoscaling_policy" "scale_up_policy" {
+  name                   = "scale-up-policy"
+  policy_type            = "SimpleScaling"
+  scaling_adjustment     = 1 # Increase desired capacity by 1 when triggered
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300 # Cooldown period in seconds before triggering another scaling action
+  autoscaling_group_name = aws_autoscaling_group.backend_asg.name
+}
+
