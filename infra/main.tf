@@ -1,10 +1,8 @@
-resource "random_password" "example" {
-  length           = 10
-  special          = false
-  override_special = "_@%"
+provider "aws" {
+  region = "us-east-1"
 }
 
-output "random_password" {
-  sensitive = true
-  value     = random_password.example.result
+
+resource "aws_vpc" "example" {
+  cidr_block = "10.0.0.0/16"
 }
