@@ -4,7 +4,7 @@ require("dotenv").config();
 const app = express();
 const port = +process.env.PORT;
 
-app.get("/healthcheck", (req, res) => {
+app.get("/health-check", (req, res) => {
     console.log(`Example app listening on port ${port}`);
     res.status(200).json({
         status: "OK",
