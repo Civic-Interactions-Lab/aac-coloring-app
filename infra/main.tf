@@ -2,6 +2,21 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Networking
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = var.vpc_info.vpc_name
+  cidr = var.vpc_info.vpc_cidr
+
+  azs             = var.vpc_info.azs
+  private_subnets = var.vpc_info.private_subnet_blocks
+  public_subnets  = var.vpc_info.public_subnet_blocks
+
+  enable_nat_gateway = true
+  create_igw = true
+}
+
 resource "aws_security_group" "allow_web_sg" {
   name = "security group from terraform"
 
@@ -30,15 +45,4 @@ resource "aws_security_group" "allow_web_sg" {
 
 }
 
-# resource "aws_instance" "aws_ins_web" {
 
-#   ami                         = "ami-080a2d17e153ef91f"
-#   instance_type               = "t2.micro"
-#   vpc_security_group_ids      = [aws_security_group.allow_web_sg.id]
-#   associate_public_ip_address = true
-
-# }
-
-# output "instance_ip" {
-#   value = aws_instance.aws_ins_web.public_ip
-# }
