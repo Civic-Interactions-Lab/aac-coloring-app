@@ -29,7 +29,8 @@ module "vpc" {
 }
 
 resource "aws_security_group" "allow_web_sg" {
-  name = "security group from terraform"
+  name   = "security group from terraform"
+  vpc_id = module.vpc.default_vpc_id
 
   ingress {
     description = "SSH from anywhere"
