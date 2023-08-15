@@ -22,7 +22,7 @@ resource "aws_security_group" "allow_web_sg" {
   name = "security group from terraform"
 
   ingress {
-    description = "SSH from the internet"
+    description = "SSH from anywhere"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -30,7 +30,7 @@ resource "aws_security_group" "allow_web_sg" {
   }
 
   ingress {
-    description = "80 from the internet"
+    description = "80 from anywhere"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -43,7 +43,6 @@ resource "aws_security_group" "allow_web_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 }
 
 
