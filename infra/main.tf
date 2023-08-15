@@ -9,9 +9,9 @@ module "vpc" {
   name = var.vpc_info.vpc_name
   cidr = var.vpc_info.vpc_cidr
 
-  azs             = var.vpc_info.azs
-  private_subnets = var.vpc_info.private_subnet_blocks
-  public_subnets  = var.vpc_info.public_subnet_blocks
+  azs             = var.vpc_subnet_info.azs
+  private_subnets = var.vpc_subnet_info.private_subnet_blocks
+  public_subnets  = var.vpc_subnet_info.public_subnet_blocks
 
   enable_nat_gateway = true
   create_igw = true
