@@ -1,1 +1,8 @@
 node_modules
+
+# tf
+.terraform 
+*lock.*
+*.tfstate
+*.backup
+google-secrets.tfvars
