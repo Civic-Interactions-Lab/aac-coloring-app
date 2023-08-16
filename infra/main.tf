@@ -160,7 +160,7 @@ module "ec2_instance" {
 
   instance_type          = "t2.micro"
   key_name               = "ec2-key"
-  vpc_security_group_ids = [aws_security_group.allow_web_sg]
+  vpc_security_group_ids = [aws_security_group.allow_web_sg.id]
   subnet_id              = module.vpc.public_subnets[1]
 
   tags = {
