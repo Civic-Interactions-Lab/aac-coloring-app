@@ -29,7 +29,7 @@ module "vpc" {
 }
 
 resource "aws_security_group" "allow_web_sg" {
-  name   = "Allow SSH from internal and HTTP"
+  name   = "Allow SSH and HTTP from anywhere"
   vpc_id = module.vpc.vpc_id
 
   ingress {
@@ -37,7 +37,7 @@ resource "aws_security_group" "allow_web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.vpc_info.vpc_cidr]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
