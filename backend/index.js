@@ -56,28 +56,6 @@ app.get("/health-check", async (req, res) => {
     });
 });
 
-app.get("/health-check-2", async (req, res) => {
-    console.log(`Example app listening on port ${port}`);
-    res.status(200).json({
-        status: "OK",
-    });
-});
-
-app.get("/get-param", async (req, res) => {
-    console.log(OpenAPIKeyPromise);
-
-    try {
-        const key = await OpenAPIKeyPromise;
-        res.status(200).json({
-            key,
-        });
-    } catch (err) {
-        res.status(403).json({
-            message: "unauthorized",
-        });
-    }
-});
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
