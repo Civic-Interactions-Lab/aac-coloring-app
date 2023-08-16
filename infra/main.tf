@@ -56,10 +56,15 @@ resource "aws_security_group" "allow_web_sg" {
   }
 }
 
+
 resource "aws_launch_template" "launch_template" {
   name          = "aac-expressjs-backend-launch-temp"
   image_id      = var.ami_info.ami
   instance_type = var.ami_info.instance_type
+
+  iam_instance_profile {
+    arn = var.ami_info.access_key_param_intance_profile_arn
+  }
 
   network_interfaces {
     device_index    = 0

@@ -23,6 +23,13 @@ variable "ami_info" {
   }
 }
 
+variable "iam_info" {
+  type = map(string)
+  default = {
+    "access_key_param_intance_profile_arn" = "arn:aws:iam::396954209126:instance-profile/AllowEC2ToAccessParamStoreViaSSMAndDecryptViaKMS"
+  }
+}
+
 variable "asg_info" {
   type = map(any)
   default = {
