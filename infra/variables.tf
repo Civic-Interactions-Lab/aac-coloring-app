@@ -18,7 +18,7 @@ variable "vpc_subnet_info" {
 variable "ami_info" {
   type = map(string)
   default = {
-    "ami"           = "ami-0f1bf358dd9b6d549"
+    "ami"           = "ami-05fa5a9c1da1493a2"
     "instance_type" = "t2.micro"
   }
 }
