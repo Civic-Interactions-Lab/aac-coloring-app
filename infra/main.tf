@@ -150,3 +150,21 @@ resource "aws_autoscaling_policy" "scale_up_policy" {
   autoscaling_group_name = aws_autoscaling_group.backend_asg.name
 }
 
+#!  ONLY FOR DEBUGGING
+#!! THIS IS A MAJOR SECURITY RISK!
+
+module "ec2_instance" {
+  source = "terraform-aws-modules/ec2-instance/aws"
+
+  name = "bastion-host"
+
+  instance_type          = "t2.micro"
+  key_name               = "ec2-key"
+  vpc_security_group_ids = [aws_security_group.allow_web_sg]
+  subnet_id              = [module.vpc.public_subnets[1]]
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
+}
