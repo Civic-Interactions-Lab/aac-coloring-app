@@ -63,7 +63,7 @@ resource "aws_launch_template" "launch_template" {
   instance_type = var.ami_info.instance_type
 
   iam_instance_profile {
-    arn = var.ami_info.access_key_param_intance_profile_arn
+    arn = var.iam_info.access_key_param_intance_profile_arn
   }
 
   network_interfaces {
