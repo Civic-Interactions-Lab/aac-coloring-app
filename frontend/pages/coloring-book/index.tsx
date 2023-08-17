@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import axios from "axios";
+import { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { GetAllImagesResponse } from "../api/s3/get-all-images";
 import Link from "next/link";
-import SVGDisplay from "@/components/Coloring-Book/SVGDisplay";
 import { getS3ObjectByKey } from "@/util/s3Util";
 import axiosWithCaching from "@/util/axiosCache";
 
@@ -17,7 +16,7 @@ export default function ColoringBookHome() {
             },
         });
 
-        getAllImagesPromise.then((resp) => {
+        getAllImagesPromise.then((resp: AxiosResponse<GetAllImagesResponse>) => {
             const data = resp.data.data;
             if (data) setAllImages(data);
         });
