@@ -15,7 +15,7 @@ const s3 = new S3();
 
 const hasSVGExtensionRegex = /^.+\.svg$/;
 
-interface GetAllImagesResponse {
+export interface GetAllImagesResponse {
     message: string;
     data?: Array<string>;
 }
