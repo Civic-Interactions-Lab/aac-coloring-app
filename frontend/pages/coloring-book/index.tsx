@@ -21,7 +21,7 @@ export default function ColoringBookHome() {
             if (data) setAllImages(data);
         });
 
-        getAllImagesPromise.catch((err) => console.error(err));
+        getAllImagesPromise.catch((err: unknown) => console.error(err));
     }, []);
 
     return (
