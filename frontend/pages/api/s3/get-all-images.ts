@@ -8,7 +8,7 @@ AWS.config.update({
 });
 
 var params = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME as string,
+    Bucket: "aac-coloring-book-images",
 };
 
 const s3 = new S3();
