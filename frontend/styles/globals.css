@@ -4,7 +4,7 @@
 
 /* No Idea how this works */
 #SVG-top-level-container svg {
-    transform: scale(1);
-    height: 100vh;
+    max-height: 100vh;
     margin: 0 auto;
+	padding: 10px 0;
 }

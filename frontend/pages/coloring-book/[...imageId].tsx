@@ -9,7 +9,7 @@ export default function ColoringPane() {
     const { query } = useRouter();
 
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-4">
             <div className="prev-img h-full min-h-screen min-w-[128px] flex items-center justify-center bg-sky-400 hover:bg-sky-700 transition duration-300 ease-out hover:ease-in">
                 <LiaAngleLeftSolid className="text-7xl text-white" />
             </div>
