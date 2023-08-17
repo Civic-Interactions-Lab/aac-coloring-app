@@ -13,7 +13,16 @@ export default function SVGDisplay(props: SVGDisplayProps) {
 
     return (
         <div className="flex flex-col w-full justify-center items-center" id="SVG-top-level-container">
-            <ReactSVG src={getS3ObjectByKey(props.imageId)} httpRequestWithCredentials={false} loading={SmallLoadingSpinner} className="max-h-screen w-full"/>
+            <ReactSVG
+                src={getS3ObjectByKey(props.imageId)}
+                httpRequestWithCredentials={false}
+                loading={SmallLoadingSpinner}
+                className="max-h-screen w-full"
+                beforeInjection={(svg) => {
+                    svg.setAttribute("width", "");
+                    svg.setAttribute("height", "");
+                }}
+            />
         </div>
     );
 }
