@@ -11,7 +11,7 @@ export default function ColoringBookHome() {
     const [allImages, setAllImages] = useState<Array<string>>([]);
 
     useEffect(() => {
-        const getAllImagesPromise = axiosWithCaching.get<GetAllImagesResponse>("/api/s3/get-all-images", {
+        const getAllImagesPromise = axiosWithCaching.get("/api/s3/get-all-images", {
             cache: {
                 ttl: 5000 * 60, // 5 minute.
             },
