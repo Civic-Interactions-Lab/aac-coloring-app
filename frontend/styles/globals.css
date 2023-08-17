@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* No Idea how this works */
+#SVG-top-level-container svg {
+    transform: scale(1);
+    height: 100vh;
+    margin: 0 auto;
+}
