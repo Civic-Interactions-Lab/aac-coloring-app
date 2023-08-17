@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { GetAllImagesResponse } from "../api/s3/get-all-images";
 import Link from "next/link";
+import SVGDisplay from "@/components/Coloring-Book/SVGDisplay";
+import { getS3ObjectByKey } from "@/util/s3Util";
 
 export default function ColoringBookHome() {
     const [allImages, setAllImages] = useState<Array<string>>([]);
@@ -17,17 +19,22 @@ export default function ColoringBookHome() {
         getAllImagesPromise.catch((err) => console.error(err));
     }, []);
 
-    console.log(allImages);
-
     return (
         <section className="font-inter p-4">
-            <h1 className="text-2xl text-bold ">All Images</h1>
+            <h1 className="text-4xl text-bold mb-8 text-center">All Images</h1>
 
-            {allImages.map((image) => (
-                <div key={image}>
-                    <Link href={`/coloring-book/${image}`} className="text-sky-700  font-poppins">{image}</Link>
-                </div>
-            ))}
+            <div className="grid gap-4 grid-cols-2 place-items-center justify-center content-center">
+                {allImages.map((image) => (
+                    <Link
+                        href={`/coloring-book/${image}`}
+                        key={image}
+                        className="w-96 h-48 rounded-md shadow-lg p-3 flex flex-col gap-2 hover:shadow-2xl"
+                    >
+                        <img src={getS3ObjectByKey(image)} alt={`image of ${image}`} className="h-full" />
+                        <p className="text-sky-700  font-poppins">{image}</p>
+                    </Link>
+                ))}
+            </div>
         </section>
     );
 }
