@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ricky0123/vad-react": "^0.0.17",
+    "@ricky0123/vad-web": "^0.0.12",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
@@ -19,6 +21,7 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.16",
     "next": "13.4.16",
+    "onnxruntime-web": "^1.15.1",
     "postcss": "8.4.28",
     "react": "18.2.0",
     "react-audio-voice-recorder": "^2.1.2",
@@ -28,5 +31,8 @@
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
     "use-http": "^1.0.28"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0"
   }
 }

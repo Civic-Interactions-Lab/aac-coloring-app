@@ -6,6 +6,10 @@ const BackendHealthCheck = dynamic(() => import("@/components/health/BackendHeal
     ssr: false,
 });
 
+const VADTestingCheck = dynamic(() => import("@/components/VAD/VADTesting"), {
+    ssr: false,
+});
+
 export default function HealthCheck() {
     return (
         <div className="w-[1400px] mx-auto pt-6 font-inter">
@@ -14,6 +18,8 @@ export default function HealthCheck() {
             <BackendHealthCheck />
             <h2 className="text-xl py-4">Functional Checks</h2>
             <VoiceRecordTrial />
+            <h2 className="text-xl py-4">Vad Checks</h2>
+            <VADTestingCheck />
         </div>
     );
 }

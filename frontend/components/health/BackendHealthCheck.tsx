@@ -11,7 +11,7 @@ interface BackendHealthEndpointType {
 export default function BackendHealthCheckComponent() {
     const refresh = useTimerIncrement();
     const { loading, error, data } = useFetch<BackendHealthEndpointType>("/api/backend-health-check", {}, [refresh]);
-    const statusIndicator = loading ? <SmallLoadingSpinner /> : <RedGreenIndicator isRed={Boolean(error)} />;
+    const statusIndicator = loading ? <SmallLoadingSpinner /> : <RedGreenIndicator isRed={Boolean(error) || !data} />;
 
     return (
         <div className="relative overflow-x-auto">
