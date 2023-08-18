@@ -34,7 +34,7 @@ export default function VADWhisperCommunicator() {
             const wavBuffer = utils.encodeWAV(audio);
             const base64 = utils.arrayBufferToBase64(wavBuffer);
             const url = `data:audio/wav;base64,${base64}`;
-            setAudioStrings([url, ...audioStrings]);
+            setAudioStrings([...audioStrings, url]);
         },
     });
 
