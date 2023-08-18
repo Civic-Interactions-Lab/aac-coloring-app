@@ -1,6 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+var bodyParser = require("body-parser");
+
+const fs = require("fs");
+const openai = require("openai");
 const AWS = require("aws-sdk");
+
+var jsonParser = bodyParser.json({ limit: "25mb" });
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 require("dotenv").config();
 
@@ -10,6 +17,8 @@ const allowedOrigins = ["https://api.openai.com", "http://localhost:3000", "http
 
 //! REMOVE ALL CREDS
 AWS.config.update({
+    // accessKeyId: undefined,
+    // secretAccessKey: undefined,
     region: "us-east-1",
 });
 
@@ -48,6 +57,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(jsonParser);
 
 // can we connect to this backend??
 app.get("/health-check", async (req, res) => {
@@ -58,8 +68,35 @@ app.get("/health-check", async (req, res) => {
 });
 
 app.post("/transcribe", async (req, res) => {
-    res.json({
-        text: "brown dog",
+    let openai_key;
+
+    try {
+        openai_key = await OpenAPIKeyPromise;
+    } catch (error) {
+        return res.status(500).json({
+            message: "API key not able to be retrived from AWS",
+        });
+    }
+
+    if (req.method !== "POST")
+        return res.status(400).json({
+            message: "Method is not POST",
+        });
+
+    const { audio } = req.body;
+
+    if (!audio || !audio.startsWith("data:audio/wav;base64,"))
+        return res.status(400).json({
+            message: "Audio file is not in correct format, needs to be in base64",
+        });
+
+    // create file
+    // send for transcribe
+    // delete file
+
+    res.status(200).json({
+        message: "ok",
+        text: "ok",
     });
 });
 
