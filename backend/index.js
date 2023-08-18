@@ -10,8 +10,6 @@ const allowedOrigins = ["https://api.openai.com", "http://localhost:3000", "http
 
 //! REMOVE ALL CREDS
 AWS.config.update({
-    accessKeyId: "AKIAVY3CQRNTM7UIM5HP",
-    secretAccessKey: "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",
     region: "us-east-1",
 });
 
