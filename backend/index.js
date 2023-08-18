@@ -6,9 +6,12 @@ require("dotenv").config();
 
 const app = express();
 const port = +process.env.PORT;
-const allowedOrigins = ["https://api.openai.com"];
+const allowedOrigins = ["https://api.openai.com", "http://localhost:3000", "https://aac-coloring-app.vercel.app/"];
 
+//! REMOVE ALL CREDS
 AWS.config.update({
+    accessKeyId: "AKIAVY3CQRNTM7UIM5HP",
+    secretAccessKey: "ePvnJu+3qZw9HsW6YhrefR9XzZkWH7tSuEf+zi1d",
     region: "us-east-1",
 });
 
@@ -53,6 +56,12 @@ app.get("/health-check", async (req, res) => {
     console.log(`Example app listening on port ${port}`);
     res.status(200).json({
         status: "OK",
+    });
+});
+
+app.post("/transcribe", async (req, res) => {
+    res.json({
+        text: "brown dog",
     });
 });
 
