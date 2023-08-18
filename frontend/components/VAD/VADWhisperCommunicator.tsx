@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { audioReducer } from "@/reducers/AudioStringStateReducer";
 import { useMicVAD, utils } from "@ricky0123/vad-react";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 
 interface TranscribeResponse {
     text?: string;
@@ -9,24 +10,34 @@ interface TranscribeResponse {
 
 export default function VADWhisperCommunicator() {
     const BACKEND_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/transcribe`;
-    const [audioStrings, setAudioStrings] = useState<Array<string>>([]);
+    const [state, dispatch] = useReducer(audioReducer, { audio: null });
 
     useEffect(() => {
-        if (audioStrings.length == 0) return;
+        const { audio } = state;
 
-        const transcribePromise = axios.post<TranscribeResponse>(BACKEND_URL, {
-            audio: audioStrings[0],
-        });
+        if (!audio) return;
 
-        transcribePromise.then((resp) => {
-            const data = resp.data;
-            console.log(data);
-        });
+        axios
+            .post<TranscribeResponse>(BACKEND_URL, {
+                audio,
+            })
+            .then((resp) => {
+                const { text } = resp.data;
 
-        transcribePromise.catch((err: any) => {
-            console.log(err);
-        });
-    }, [audioStrings]);
+                if (text) {
+                    console.log("transcribed:", text);
+                    console.log("resp:", resp.data);
+                }
+            })
+            .catch((err: any) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch({
+                    type: "remove",
+                });
+            });
+    }, [state]);
 
     const vad = useMicVAD({
         startOnLoad: true,
@@ -34,11 +45,12 @@ export default function VADWhisperCommunicator() {
             const wavBuffer = utils.encodeWAV(audio);
             const base64 = utils.arrayBufferToBase64(wavBuffer);
             const url = `data:audio/wav;base64,${base64}`;
-            setAudioStrings([...audioStrings, url]);
+            dispatch({
+                type: "add",
+                payload: url,
+            });
         },
     });
 
-    //console.log(audioStrings);
-
-    return <p>{audioStrings.length}</p>;
+    return null;
 }
