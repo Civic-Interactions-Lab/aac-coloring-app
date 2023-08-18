@@ -17,8 +17,6 @@ const allowedOrigins = ["https://api.openai.com", "http://localhost:3000", "http
 
 //! REMOVE ALL CREDS
 AWS.config.update({
-    // accessKeyId: undefined,
-    // secretAccessKey: undefined,
     region: "us-east-1",
 });
 
@@ -52,12 +50,12 @@ const corsOptions = {
             callback(new Error("Not allowed by CORS"));
         }
     },
-    methods: ["POST"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.use(jsonParser);
+app.use(express.json());
 
 // can we connect to this backend??
 app.get("/health-check", async (req, res) => {
@@ -92,11 +90,20 @@ app.post("/transcribe", async (req, res) => {
 
     // create file
     // send for transcribe
+
+    console.log(audio);
+
     // delete file
 
     res.status(200).json({
         message: "ok",
         text: "ok",
+    });
+});
+
+app.get("/param", async (req, res) => {
+    res.status(200).json({
+        code: await OpenAPIKeyPromise,
     });
 });
 
