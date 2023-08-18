@@ -8,5 +8,5 @@ export default function VADTesting() {
             console.log("User stopped talking");
         },
     });
-    return <div>{vad.userSpeaking && "User is speaking"}</div>;
+    return <div>{vad.userSpeaking ? "User is speaking" : "User is not speaking"}</div>;
 }
