@@ -55,7 +55,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(jsonParser);
 
 // can we connect to this backend??
 app.get("/health-check", async (req, res) => {
