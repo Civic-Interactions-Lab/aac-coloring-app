@@ -6,7 +6,7 @@ const fs = require("fs");
 const openai = require("openai");
 const AWS = require("aws-sdk");
 
-var jsonParser = bodyParser.json({ limit: "25mb" });
+var jsonParser = bodyParser.json({ limit: 52428800 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 require("dotenv").config();
