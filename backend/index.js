@@ -101,12 +101,6 @@ app.post("/transcribe", async (req, res) => {
     });
 });
 
-app.get("/param", async (req, res) => {
-    res.status(200).json({
-        code: await OpenAPIKeyPromise,
-    });
-});
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
