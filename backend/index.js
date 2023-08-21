@@ -3,7 +3,9 @@ const cors = require("cors");
 var bodyParser = require("body-parser");
 
 const fs = require("fs");
-const openai = require("openai");
+const path = require("path");
+const { computeMD5Hash } = require("./hash");
+const { transcribe } = require("./openai_transcribe");
 const AWS = require("aws-sdk");
 
 var jsonParser = bodyParser.json({ limit: 52428800 });
@@ -13,7 +15,7 @@ require("dotenv").config();
 
 const app = express();
 const port = +process.env.PORT;
-const allowedOrigins = ["https://api.openai.com", "http://localhost:3000", "https://aac-coloring-app.vercel.app/"];
+const allowedOrigins = ["http://localhost:3000", "https://aac-coloring-app.vercel.app/"];
 
 //! REMOVE ALL CREDS
 AWS.config.update({
@@ -88,17 +90,29 @@ app.post("/transcribe", async (req, res) => {
             message: "Audio file is not in correct format, needs to be in base64",
         });
 
-    // create file
-    // send for transcribe
+    const audioHash = computeMD5Hash(audio);
+    const filePath = path.join(__dirname, `${audioHash}.wav`);
 
-    console.log(audio);
+    try {
+        const buffer = Buffer.from(
+            audio.split("base64,")[1], // only use encoded data after "base64,"
+            "base64"
+        );
+        fs.writeFileSync(filePath, buffer);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "fs error" });
+    }
 
-    // delete file
+    try {
+        const transcription = await transcribe(openai_key, filePath);
+        res.status(200).json(transcription);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "openapi error" });
+    }
 
-    res.status(200).json({
-        message: "ok",
-        text: "ok",
-    });
+    fs.unlinkSync(filePath);
 });
 
 app.listen(port, () => {
