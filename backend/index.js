@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { computeMD5Hash } = require("./hash");
 const { transcribe } = require("./openai_transcribe");
+const { processString } = require("./text_processor");
 const AWS = require("aws-sdk");
 
 var jsonParser = bodyParser.json({ limit: 52428800 });
@@ -78,11 +79,6 @@ app.post("/transcribe", async (req, res) => {
         });
     }
 
-    if (req.method !== "POST")
-        return res.status(400).json({
-            message: "Method is not POST",
-        });
-
     const { audio } = req.body;
 
     if (!audio || !audio.startsWith("data:audio/wav;base64,"))
@@ -106,7 +102,12 @@ app.post("/transcribe", async (req, res) => {
 
     try {
         const transcription = await transcribe(openai_key, filePath);
-        res.status(200).json(transcription);
+
+        if (!transcription.text) res.status(500).json({ message: "openapi error: missing transcription->text" });
+        else
+            res.status(200).json({
+                text: processString(transcription.text),
+            });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "openapi error" });

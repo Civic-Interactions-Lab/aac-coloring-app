@@ -10,7 +10,6 @@ async function transcribe(openai_key, filename) {
         model: "whisper-1",
     });
 
-    console.log(transcription);
     return transcription;
 }
 
