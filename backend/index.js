@@ -10,13 +10,12 @@ const { processString } = require("./text_processor");
 const AWS = require("aws-sdk");
 
 var jsonParser = bodyParser.json({ limit: 52428800 });
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 require("dotenv").config();
 
 const app = express();
 const port = +process.env.PORT;
-const allowedOrigins = ["http://localhost:3000", "https://aac-coloring-app.vercel.app/"];
+const allowedOrigins = ["http://localhost:3000", "https://aac-coloring-app.vercel.app"];
 
 //! REMOVE ALL CREDS
 AWS.config.update({
