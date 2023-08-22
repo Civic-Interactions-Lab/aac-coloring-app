@@ -1,13 +1,10 @@
 import VoiceRecordTrial from "@/components/voice-recording/VoiceRecordTrial";
-import VadAudioQueueProvider from "@/contexts/vadAudioContext";
+import SVGActionPrinter from "@/contexts/audioTranscriptionContext/SVGActionPrinter";
+import AudioTranscriptionTranslationProvider from "@/contexts/audioTranscriptionContext/audioTranscriptionContext";
 import dynamic from "next/dynamic";
 import React from "react";
 
 const BackendHealthCheck = dynamic(() => import("@/components/health/BackendHealthCheck"), {
-    ssr: false,
-});
-
-const VADTestingCheck = dynamic(() => import("@/components/VAD/VADTesting"), {
     ssr: false,
 });
 
@@ -26,7 +23,11 @@ export default function HealthCheck() {
             <h2 className="text-xl py-4">Functional Checks</h2>
             <VoiceRecordTrial />
             <h2 className="text-xl py-4">Vad Checks</h2>
-            <VADWhisperCommunicator />
+            <AudioTranscriptionTranslationProvider>
+                <h3 className="text-lg py-4">Relevent Utterances</h3>
+                <SVGActionPrinter />
+                <VADWhisperCommunicator />
+            </AudioTranscriptionTranslationProvider>
         </div>
     );
 }

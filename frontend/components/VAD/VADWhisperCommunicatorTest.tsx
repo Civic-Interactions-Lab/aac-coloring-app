@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useAudioTranscriptionContext } from "@/contexts/audioTranscriptionContext/audioTranscriptionContext";
 import { audioReducer } from "@/reducers/AudioStringStateReducer";
 import { useMicVAD, utils } from "@ricky0123/vad-react";
 import axios from "axios";
 import React, { useEffect, useReducer } from "react";
 
 interface TranscribeResponse {
-    text?: Array<string>;
+    text?: string;
 }
 
 export default function VADWhisperCommunicator() {
     const BACKEND_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/transcribe`;
     const [state, dispatch] = useReducer(audioReducer, { audio: null });
-
-    const { addTranscription } = useAudioTranscriptionContext();
 
     useEffect(() => {
         const { audio } = state;
@@ -28,7 +25,8 @@ export default function VADWhisperCommunicator() {
                 const { text } = resp.data;
 
                 if (text) {
-                    addTranscription(text);
+                    console.log("transcribed:", text);
+                    console.log("resp:", resp.data);
                 }
             })
             .catch((err: any) => {
