@@ -1,7 +1,12 @@
 import SVGTargetsReducer from "@/reducers/SVGTargetsReducer";
 import { isColorInList, isTargetInList } from "@/util/ColoringBookSVGObjects/ColoringBookSVGObjects.util";
 import { SVGPaintAction, SVGPaintActionArray, isFullyDefinedSVGAction } from "@/util/ColoringBookSVGObjects/SVGPaintAction";
+import dynamic from "next/dynamic";
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
+
+const VADWhisperCommunicator = dynamic(() => import("@/components/VAD/VADWhisperCommunicator"), {
+    ssr: false,
+});
 
 type TranscriptionType = Array<string>;
 type TranscriptionArray = Array<TranscriptionType>;
@@ -64,5 +69,10 @@ export default function AudioTranscriptionTranslationProvider(props: AudioTransc
         console.log(rawTranscriptions);
     }, [rawTranscriptions]);
 
-    return <transcriptionContext.Provider value={value}>{props?.children}</transcriptionContext.Provider>;
+    return (
+        <transcriptionContext.Provider value={value}>
+            <VADWhisperCommunicator />
+            {props?.children}
+        </transcriptionContext.Provider>
+    );
 }

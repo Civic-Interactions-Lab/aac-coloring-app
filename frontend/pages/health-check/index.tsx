@@ -13,8 +13,6 @@ const VADWhisperCommunicator = dynamic(() => import("@/components/VAD/VADWhisper
 });
 
 export default function HealthCheck() {
-    console.log("render home");
-
     return (
         <div className="w-[1400px] mx-auto pt-6 font-inter">
             <h1 className="text-2xl py-4">Health Checks</h1>
@@ -26,7 +24,6 @@ export default function HealthCheck() {
             <AudioTranscriptionTranslationProvider>
                 <h3 className="text-lg py-4">Relevent Utterances</h3>
                 <SVGActionPrinter />
-                <VADWhisperCommunicator />
             </AudioTranscriptionTranslationProvider>
         </div>
     );
