@@ -3,7 +3,7 @@ function removeNonAlpha(str) {
 }
 
 function tokenize(str) {
-    return str.split(" ").map((token) => token.toUpperCase());
+    return str.split(" ").map((token) => token.toLowerCase());
 }
 
 module.exports = {
