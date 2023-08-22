@@ -13,7 +13,7 @@ export default function VADWhisperCommunicator() {
     const BACKEND_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/transcribe`;
     const [state, dispatch] = useReducer(audioReducer, { audio: null });
 
-    const { addTranscription } = useAudioTranscriptionContext();
+    const { processTranscription } = useAudioTranscriptionContext();
 
     useEffect(() => {
         const { audio } = state;
@@ -28,7 +28,7 @@ export default function VADWhisperCommunicator() {
                 const { text } = resp.data;
 
                 if (text) {
-                    addTranscription(text);
+                    processTranscription(text);
                 }
             })
             .catch((err: any) => {
