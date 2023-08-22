@@ -1,7 +1,7 @@
 provider "aws" {
   region                   = "us-east-1"
   shared_credentials_files = ["~/.aws/credentials"]
-  profile                  = "personal-dev"
+  profile                  = "personal-general"
 }
 
 # Networking
@@ -50,6 +50,15 @@ resource "aws_security_group" "allow_web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "443 from anywhere"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -58,6 +67,84 @@ resource "aws_security_group" "allow_web_sg" {
   }
 }
 
+# IAM
+
+resource "aws_iam_policy" "allow_ssm_param" {
+  name        = "AllowAccessToSSMParamStoreForVarsThatInPathACC"
+  description = "See Name"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowReadingForParamStoreVarsThatBeginWithAAC",
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:DescribeParameters"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Sid" : "AllowGetForParamStoreVarsThatBeginWithAAC",
+        "Effect" : "Allow",
+        "Action" : [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath"
+        ],
+        "Resource" : "arn:aws:ssm:us-east-1:373319509873:parameter/AAC/*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "allow_kms_decrypt_key" {
+  name        = "AllowAccessToDefaultSSMKey"
+  description = "See Name"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowAccessToDefaultSSMKey",
+        "Effect" : "Allow",
+        "Action" : [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ],
+        "Resource" : [
+          "arn:aws:kms:us-east-1:373319509873:key/9aa6f00a-4524-4f41-b92a-cfa65422f99f"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "ec2_ssm_role" {
+  name = "AllowEC2ToAccessParamStoreViaSSMAndDecryptViaKMS"
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "ec2.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+  managed_policy_arns = [aws_iam_policy.allow_kms_decrypt_key.arn, aws_iam_policy.allow_ssm_param.arn]
+}
+
+resource "aws_iam_instance_profile" "ec2_ssm_profile" {
+  name = "AllowEC2ToAccessParamStoreViaSSMAndDecryptViaKMS"
+  role = aws_iam_role.ec2_ssm_role.name
+}
+
+
 
 resource "aws_launch_template" "launch_template" {
   name          = "aac-expressjs-backend-launch-temp"
@@ -65,7 +152,7 @@ resource "aws_launch_template" "launch_template" {
   instance_type = var.ami_info.instance_type
 
   iam_instance_profile {
-    arn = var.iam_info.access_key_param_intance_profile_arn
+    arn = aws_iam_instance_profile.ec2_ssm_profile.arn
   }
 
   network_interfaces {
@@ -107,6 +194,8 @@ resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "80"
   protocol          = "HTTP"
+  # ssl_policy        = var.ssl_info.ssl_policy
+  # certificate_arn   = var.ssl_info.certificate_arn
 
   default_action {
     type             = "forward"
@@ -159,19 +248,18 @@ resource "aws_autoscaling_policy" "scale_up_policy" {
 
 #!  ONLY FOR DEBUGGING
 #!! THIS IS A MAJOR SECURITY RISK!
+# module "ec2_instance" {
+#   source = "terraform-aws-modules/ec2-instance/aws"
 
-module "ec2_instance" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+#   name = "bastion-host"
 
-  name = "bastion-host"
+#   instance_type          = "t2.micro"
+#   key_name               = "ec2-key"
+#   vpc_security_group_ids = [aws_security_group.allow_web_sg.id]
+#   subnet_id              = module.vpc.public_subnets[1]
 
-  instance_type          = "t2.micro"
-  key_name               = "ec2-key"
-  vpc_security_group_ids = [aws_security_group.allow_web_sg.id]
-  subnet_id              = module.vpc.public_subnets[1]
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
-}
+#   tags = {
+#     Terraform   = "true"
+#     Environment = "dev"
+#   }
+# }

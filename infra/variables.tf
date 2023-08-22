@@ -18,15 +18,16 @@ variable "vpc_subnet_info" {
 variable "ami_info" {
   type = map(string)
   default = {
-    "ami"           = "ami-0224e2424def4eab2"
+    "ami"           = "ami-06a04d3a972903419"
     "instance_type" = "t2.micro"
   }
 }
 
-variable "iam_info" {
+variable "ssl_info" {
   type = map(string)
   default = {
-    "access_key_param_intance_profile_arn" = "arn:aws:iam::396954209126:instance-profile/AllowEC2ToAccessParamStoreViaSSMAndDecryptViaKMS"
+    "ssl_policy"      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+    "certificate_arn" = "arn:aws:acm:us-east-1:373319509873:certificate/fc6d06d1-106d-4717-be92-da61bce40199"
   }
 }
 
