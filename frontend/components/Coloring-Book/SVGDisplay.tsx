@@ -2,8 +2,6 @@
 import { getS3ObjectByKey } from "@/util/s3Util";
 import React from "react";
 import { SvgLoader, SvgProxy } from "react-svgmt";
-import { ReactSVG } from "react-svg";
-import SmallLoadingSpinner from "../general/SmallLoadingSpinner";
 import { useAudioTranscriptionContext } from "@/contexts/audioTranscriptionContext/audioTranscriptionContext";
 
 export interface SVGDisplayProps {
