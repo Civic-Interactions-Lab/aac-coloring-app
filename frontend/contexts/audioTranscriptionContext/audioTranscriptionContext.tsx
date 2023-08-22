@@ -15,12 +15,14 @@ export interface AudioTranscriptionContext {
     rawTranscriptions: TranscriptionArray;
     processTranscription: (item: TranscriptionType) => void;
     SVGPaintActions: SVGPaintActionArray;
+    resetState: () => void;
 }
 
 const transcriptionContext = createContext<AudioTranscriptionContext>({
     rawTranscriptions: [],
     processTranscription(item) {},
     SVGPaintActions: [],
+    resetState() {},
 });
 
 export const useAudioTranscriptionContext = () => {
@@ -58,15 +60,24 @@ export default function AudioTranscriptionTranslationProvider(props: AudioTransc
         setcurrentSVGPaintAction(newSVGPaintAction);
     };
 
+    const resetState = () => {
+        setRawTranscriptions([]);
+        setcurrentSVGPaintAction({});
+        dispatch({
+            type: "reset",
+        });
+    };
+
     const value = {
         rawTranscriptions,
         processTranscription,
         SVGPaintActions,
+        resetState,
     };
 
     //logging
     useEffect(() => {
-        console.log(rawTranscriptions);
+        console.log("Transcription History:", rawTranscriptions);
     }, [rawTranscriptions]);
 
     return (

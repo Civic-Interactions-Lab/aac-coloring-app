@@ -21,6 +21,7 @@ export interface GetAllImagesResponse {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<GetAllImagesResponse>) {
+
     const s3GetPromise = new Promise<S3.ListObjectsV2Output>((resolve, reject) => {
         s3.listObjectsV2(params, function (err, data) {
             if (err) {

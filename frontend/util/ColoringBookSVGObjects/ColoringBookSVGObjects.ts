@@ -7,6 +7,7 @@ export const targets = [
     "giraffe",
     "zebra",
     "bear",
+    "fish",
     "penguin",
     "panda",
     "koala",
