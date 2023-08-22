@@ -1,19 +1,20 @@
+import SVGTargetsReducer from "@/reducers/SVGTargetsReducer";
 import { isColorInList, isTargetInList } from "@/util/ColoringBookSVGObjects/ColoringBookSVGObjects.util";
 import { SVGPaintAction, SVGPaintActionArray, isFullyDefinedSVGAction } from "@/util/ColoringBookSVGObjects/SVGPaintAction";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 
 type TranscriptionType = Array<string>;
 type TranscriptionArray = Array<TranscriptionType>;
 
 export interface AudioTranscriptionContext {
     rawTranscriptions: TranscriptionArray;
-    addTranscription: (item: TranscriptionType) => void;
+    processTranscription: (item: TranscriptionType) => void;
     SVGPaintActions: SVGPaintActionArray;
 }
 
 const transcriptionContext = createContext<AudioTranscriptionContext>({
     rawTranscriptions: [],
-    addTranscription(item) {},
+    processTranscription(item) {},
     SVGPaintActions: [],
 });
 
@@ -29,30 +30,32 @@ export default function AudioTranscriptionTranslationProvider(props: AudioTransc
     const [rawTranscriptions, setRawTranscriptions] = useState<TranscriptionArray>([]);
 
     const [currentSVGPaintActions, setcurrentSVGPaintAction] = useState<SVGPaintAction>({});
-    const [SVGPaintActions, setSVGPaintAction] = useState<SVGPaintActionArray>([]);
+    const [SVGPaintActions, dispatch] = useReducer(SVGTargetsReducer, []);
 
-    const addTranscription = (item: TranscriptionType) => {
-        const newSVGPaintAction: SVGPaintAction = {};
+    const processTranscription = (item: TranscriptionType) => {
+        let newSVGPaintAction: SVGPaintAction = { ...currentSVGPaintActions };
 
         item.forEach((token) => {
             if (isTargetInList(token)) newSVGPaintAction.object = token;
             else if (isColorInList(token)) newSVGPaintAction.color = token;
+
+            // trigger partial update to ask (politely) state handlers to update SVGActions state (ASYNC)
+            if (isFullyDefinedSVGAction(newSVGPaintAction)) {
+                dispatch({
+                    type: "add",
+                    payload: newSVGPaintAction,
+                });
+                newSVGPaintAction = {};
+            }
         });
 
         setRawTranscriptions([...rawTranscriptions, [...item]]);
-        setcurrentSVGPaintAction({ ...newSVGPaintAction });
+        setcurrentSVGPaintAction(newSVGPaintAction);
     };
-
-    useEffect(() => {
-        if (isFullyDefinedSVGAction(currentSVGPaintActions)) {
-            setSVGPaintAction([...SVGPaintActions, { ...currentSVGPaintActions }]);
-            setcurrentSVGPaintAction({});
-        }
-    }, [SVGPaintActions, currentSVGPaintActions, setSVGPaintAction, setcurrentSVGPaintAction]);
 
     const value = {
         rawTranscriptions,
-        addTranscription,
+        processTranscription,
         SVGPaintActions,
     };
 
