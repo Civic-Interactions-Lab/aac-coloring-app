@@ -14,7 +14,7 @@ export default function SVGDisplay(props: SVGDisplayProps) {
     if (!props.imageId) return null;
 
     return (
-        <div className="flex flex-col w-full justify-center items-center" id="SVG-top-level-container">
+        <div className="flex flex-col w-full justify-center items-center bg-white" id="SVG-top-level-container">
             <SvgLoader path={getS3ObjectByKey(props.imageId)} width="100%" height="100%">
                 {SVGPaintActions.map((SVGPaintAction, idx) => (
                     <SvgProxy key={idx} selector={`#${SVGPaintAction.object}`} fill={SVGPaintAction.color} />

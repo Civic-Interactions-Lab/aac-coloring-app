@@ -23,12 +23,12 @@ export default function ColoringBookHome() {
         <section className="font-inter p-4">
             <h1 className="text-4xl text-bold mb-8 text-center">All Images</h1>
 
-            <div className="grid gap-4 grid-cols-2 place-items-center justify-center content-center">
+            <div className="grid gap-4 grid-cols-3 place-items-center justify-center content-center mid-max:grid-cols-1 2xl-max:grid-cols-2">
                 {allImages.map((image) => (
                     <Link
                         href={`/coloring-book/${image}`}
                         key={image}
-                        className="w-96 h-48 rounded-md shadow-lg p-3 flex flex-col gap-2 hover:shadow-2xl"
+                        className="w-96 h-48 rounded-md shadow-lg p-3 flex flex-col gap-2 hover:shadow-2xl mid-max:w-[30-rem] mid-max:h-72"
                     >
                         <img src={getS3ObjectByKey(image)} alt={`image of ${image}`} className="h-full" />
                         <p className="text-sky-700  font-poppins">{image}</p>
