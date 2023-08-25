@@ -60,7 +60,7 @@ export function SlideShowButtonFactory(props: SlideShowButtonFactoryProps) {
 
     useEffect(() => {
         resetState();
-    }, [query.imageId]);
+    }, [query.imageId, resetState]);
 
     let placements = PlacementsFactory();
     if (data && data.data && !error) placements = getPlacements(query.imageId, data.data);
