@@ -7,6 +7,7 @@ export default function Home() {
     return (
         <main>
             <Navbar />
+            <div className="w-[1280px] mx-auto"></div>
         </main>
     );
 }

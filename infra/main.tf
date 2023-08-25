@@ -192,10 +192,12 @@ resource "aws_lb_target_group" "target_group" {
 
 resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.alb.arn
-  port              = "80"
-  protocol          = "HTTP"
-  # ssl_policy        = var.ssl_info.ssl_policy
-  # certificate_arn   = var.ssl_info.certificate_arn
+  # port              = "80"
+  # protocol          = "HTTP"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = var.ssl_info.ssl_policy
+  certificate_arn   = var.ssl_info.certificate_arn
 
   default_action {
     type             = "forward"
@@ -244,6 +246,15 @@ resource "aws_autoscaling_policy" "scale_up_policy" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300 # Cooldown period in seconds before triggering another scaling action
   autoscaling_group_name = aws_autoscaling_group.backend_asg.name
+}
+
+
+resource "aws_route53_record" "backend_mapping" {
+  zone_id = var.r53_info.zone_id
+  name    = "aac-coloringbook.backend-aws.com"
+  type    = "CNAME"
+  ttl     = 60
+  records = [aws_lb.alb.dns_name]
 }
 
 #!  ONLY FOR DEBUGGING

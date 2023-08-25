@@ -27,7 +27,7 @@ variable "ssl_info" {
   type = map(string)
   default = {
     "ssl_policy"      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-    "certificate_arn" = "arn:aws:acm:us-east-1:373319509873:certificate/fc6d06d1-106d-4717-be92-da61bce40199"
+    "certificate_arn" = "arn:aws:acm:us-east-1:373319509873:certificate/829e16d5-c604-475f-b1ac-149ecb9a2efd"
   }
 }
 
@@ -37,5 +37,12 @@ variable "asg_info" {
     desired_capacity = 1
     max_size         = 4
     min_size         = 1
+  }
+}
+
+variable "r53_info" {
+  type = map(any)
+  default = {
+    zone_id = "Z09701283QE4WGGR7BYQV"
   }
 }
