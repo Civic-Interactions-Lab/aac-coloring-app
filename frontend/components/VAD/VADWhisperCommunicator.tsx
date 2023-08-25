@@ -3,7 +3,7 @@ import { useAudioTranscriptionContext } from "@/contexts/audioTranscriptionConte
 import { audioReducer } from "@/reducers/AudioStringStateReducer";
 import { useMicVAD, utils } from "@ricky0123/vad-react";
 import axios from "axios";
-import React, { useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
 interface TranscribeResponse {
     text?: Array<string>;
