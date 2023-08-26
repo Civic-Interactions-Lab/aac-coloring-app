@@ -58,6 +58,7 @@ export function SlideShowButtonFactory(props: SlideShowButtonFactoryProps) {
 
     const { resetState } = useAudioTranscriptionContext();
 
+    //! DO NOT INCLUDE resetState in dep list will crash app
     useEffect(() => {
         resetState();
     }, [query.imageId]);
