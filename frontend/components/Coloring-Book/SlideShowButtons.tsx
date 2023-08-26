@@ -58,10 +58,14 @@ export function SlideShowButtonFactory(props: SlideShowButtonFactoryProps) {
 
     const { resetState } = useAudioTranscriptionContext();
 
-    //! DO NOT INCLUDE resetState in dep list will crash app
-    useEffect(() => {
-        resetState();
-    }, [query.imageId, resetState]);
+    useEffect(
+        () => {
+            resetState();
+        },
+        //! DO NOT INCLUDE resetState in dep list will crash app
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [query.imageId]
+    );
 
     let placements = PlacementsFactory();
     if (data && data.data && !error) placements = getPlacements(query.imageId, data.data);
