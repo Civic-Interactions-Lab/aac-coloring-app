@@ -24,6 +24,10 @@ terraform {
     key            = "aac/coloring-book-personal/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    profile        = "personal-general"
+
+    # for future collab use --> 
+    #   terraform init -backend-config="profile=your-profile-name" 
+    # for new partners
+    profile = "personal-general"
   }
 }

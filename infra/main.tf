@@ -194,10 +194,10 @@ resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.alb.arn
   # port              = "80"
   # protocol          = "HTTP"
-  port              = "443"
-  protocol          = "HTTPS"
-  ssl_policy        = var.ssl_info.ssl_policy
-  certificate_arn   = var.ssl_info.certificate_arn
+  port            = "443"
+  protocol        = "HTTPS"
+  ssl_policy      = var.ssl_info.ssl_policy
+  certificate_arn = var.ssl_info.certificate_arn
 
   default_action {
     type             = "forward"
@@ -256,21 +256,3 @@ resource "aws_route53_record" "backend_mapping" {
   ttl     = 60
   records = [aws_lb.alb.dns_name]
 }
-
-#!  ONLY FOR DEBUGGING
-#!! THIS IS A MAJOR SECURITY RISK!
-# module "ec2_instance" {
-#   source = "terraform-aws-modules/ec2-instance/aws"
-
-#   name = "bastion-host"
-
-#   instance_type          = "t2.micro"
-#   key_name               = "ec2-key"
-#   vpc_security_group_ids = [aws_security_group.allow_web_sg.id]
-#   subnet_id              = module.vpc.public_subnets[1]
-
-#   tags = {
-#     Terraform   = "true"
-#     Environment = "dev"
-#   }
-# }
