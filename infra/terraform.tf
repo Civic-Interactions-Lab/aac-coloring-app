@@ -14,7 +14,16 @@ terraform {
   #   }
   # }
 
-  backend "local" {
+  # backend "local" {
 
+  # }
+
+  backend "s3" {
+    bucket         = "perma-terraform-state-bucket"
+    dynamodb_table = "state-lock-aac-IAC"
+    key            = "aac/coloring-book-personal/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    profile        = "personal-general"
   }
 }
