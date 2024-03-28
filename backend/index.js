@@ -4,17 +4,27 @@ var bodyParser = require("body-parser");
 
 const fs = require("fs");
 const path = require("path");
+
 const { computeMD5Hash } = require("./hash");
 const { transcribe } = require("./openai_transcribe");
 const { processString } = require("./text_processor");
+
 const AWS = require("aws-sdk");
 
 var jsonParser = bodyParser.json({ limit: 52428800 });
 
-require("dotenv").config();
+// load secrets
+require("dotenv").config({
+    path: "./.env.local",
+});
+
+// load common
+require("dotenv").config({
+    path: "./.env",
+});
 
 const app = express();
-const port = +process.env.PORT;
+const port = +process.env.PORT || 8000;
 const allowedOrigins = ["http://localhost:3000", "https://aac-coloring-app.vercel.app"];
 
 //! REMOVE ALL CREDS
@@ -22,7 +32,15 @@ AWS.config.update({
     region: "us-east-1",
 });
 
+
+// Gets the OpenAI secret key :)
 const OpenAPIKeyPromise = new Promise((resolve, reject) => {
+    const LOCAL_API_KEY = process.env.OPENAI_API_KEY;
+
+    if (typeof LOCAL_API_KEY !== "undefined") {
+        resolve(LOCAL_API_KEY);
+    }
+
     // Create an instance of the SSM service
     const ssm = new AWS.SSM();
 
@@ -62,8 +80,10 @@ app.use(jsonParser);
 // can we connect to this backend??
 app.get("/health-check", async (req, res) => {
     console.log(`Example app listening on port ${port}`);
+    const key = await OpenAPIKeyPromise;
     res.status(200).json({
         status: "OK",
+        key,
     });
 });
 
