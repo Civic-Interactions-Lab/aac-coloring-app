@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { audioReducer } from "@/reducers/AudioStringStateReducer";
+import { getBackendUrl } from "@/util/getBackendUrl";
 import { useMicVAD, utils } from "@ricky0123/vad-react";
 import axios from "axios";
 import { useEffect, useReducer } from "react";
@@ -9,7 +10,7 @@ interface TranscribeResponse {
 }
 
 export default function VADWhisperCommunicator() {
-    const BACKEND_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/transcribe`;
+    const BACKEND_URL = `${getBackendUrl()}/transcribe`;
     const [state, dispatch] = useReducer(audioReducer, { audio: null });
 
     useEffect(() => {
